@@ -23,7 +23,7 @@
                     target: document.querySelector("#scanner"),
                     constraints: { facingMode: "environment" }
                 },
-                decoder: { readers: ["ean_reader", "code_128_reader", "qr_reader"] }
+                decoder: { readers: ["ean_reader", "code_128_reader", "ean", "qr_reader"] }
             }, function (err) {
                 if (!err) {
                     Quagga.start();
