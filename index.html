@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сканер штрих-кодов</title>
+    <script src="https://serratus.github.io/quaggaJS/examples/js/quagga.min.js"></script>
+</head>
+<body>
+    <h2>Сканирование штрих-кода</h2>
+    <button onclick="startScanner()">📸 Открыть камеру</button>
+    <video id="scanner" style="width: 100%; max-width: 500px; display: none;"></video>
+    <p id="result">Результат: <span>-</span></p>
+
+    <script>
+        function startScanner() {
+            document.getElementById("scanner").style.display = "block";
+
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector("#scanner"),
+                    constraints: { facingMode: "environment" }
+                },
+                decoder: { readers: ["ean_reader", "code_128_reader", "qr_reader"] }
+            }, function (err) {
+                if (!err) {
+                    Quagga.start();
+                } else {
+                    console.error("Ошибка инициализации Quagga:", err);
+                }
+            });
+
+            Quagga.onDetected(function (result) {
+                document.getElementById("result").innerHTML = "Результат: " + result.codeResult.code;
+                Quagga.stop();
+            });
+        }
+    </script>
+</body>
+</html>
